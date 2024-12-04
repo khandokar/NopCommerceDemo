@@ -1,0 +1,131 @@
+﻿@using BSSNop.PlugIn.Widgets.Banner.Models;
+@using Nop.Web.Framework.Models.DataTables
+@model BannerSearchModel
+@{
+    //page title
+    ViewBag.Title = "Banner";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@* @await Component.InvokeAsync(typeof(StoreScopeConfigurationViewComponent)) *@
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Admin.Banner.List")
+    </h1>
+    <div class="float-right">
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fa fa-plus-square"></i>
+            @T("Admin.Common.AddNew")
+        </a>
+        <button type="button" id="delete-selected" class="btn btn-danger">
+            <i class="far fa-trash-alt"></i>
+            @T("Admin.Common.Delete.Selected")
+        </button>
+        <nop-action-confirmation asp-button-id="delete-selected" />
+        @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new
+            {
+                widgetZone = BannerDefaults.BannerListButtons,
+                additionalData = Model
+            })
+    </div>
+</div>
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @await Html.PartialAsync("Table", new DataTablesModel
+               {
+                   Name = "banner-grid",
+                   UrlRead = new DataUrl("List", "WidgetBanner", null),
+                   UrlDelete = new DataUrl("Delete", "WidgetBanner", null),
+                   Length = Model.PageSize,
+                   LengthMenu = Model.AvailablePageSizes,
+                    ColumnCollection = new List<ColumnProperty>
+                    {
+                    new ColumnProperty(nameof(BannerModel.Id))
+                    {
+                    IsMasterCheckBox = true,
+                    Render = new RenderCheckBox("checkbox_products"),
+                    ClassName =  NopColumnClassDefaults.CenterAll,
+                    Width = "50"
+                    },
+                    new ColumnProperty(nameof(BannerModel.Url))
+                    {
+                    Title = T("Admin.Catalog.Products.Fields.PictureThumbnailUrl").Text,
+                    Width = "100",
+                    Render = new RenderPicture()
+                    {
+                    Width = 100
+                    }
+                    },
+                    new ColumnProperty(nameof(BannerModel.NavigationUrl))
+                    {
+                    Title = T("Admin.Banner.NavigationUrl").Text,
+                    Width = "150",
+                    ClassName =  NopColumnClassDefaults.CenterAll
+                    },
+                    new ColumnProperty(nameof(BannerModel.Visibility))
+                    {
+                    Title = T("Admin.Catalog.Categories.Fields.Published").Text,
+                    Width = "100",
+                    ClassName = NopColumnClassDefaults.CenterAll,
+                    Render = new RenderBoolean()
+                    },
+                    new ColumnProperty(nameof(BannerModel.SelectedWidgetZone))
+                    {
+                    Title = T("Admin.Common.SelectedWidgetZone").Text,
+                    Width = "30",
+                    ClassName =  NopColumnClassDefaults.CenterAll
+                    },
+                    new ColumnProperty(nameof(BannerModel.Id))
+                    {
+                    Title = T("Admin.Common.Edit").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new RenderButtonEdit(new DataUrl("Edit"))
+                    },
+                    new ColumnProperty(nameof(BannerModel.Id))
+                    {
+                    Title = T("Admin.Common.Delete").Text,
+                    Width = "100",
+                    ClassName =  NopColumnClassDefaults.Button,
+                    Render = new  RenderButtonRemove(T("Admin.Common.Delete").Text)
+                    },
+                    }
+               })
+                    <script>
+                        $(function () {
+                            $('#delete-selected-action-confirmation-submit-button').bind('click', function () {
+                                var postData = {
+                                    selectedIds: selectedIds
+                                };
+                                addAntiForgeryToken(postData);
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("DeleteSelected", "WidgetBanner"))",
+                                    data: postData,
+                                    error: function (jqXHR, textStatus, errorThrown) {
+                                        showAlert('deleteSelectedFailed', errorThrown);
+                                    },
+                                    complete: function (jqXHR, textStatus) {
+                                        if (jqXHR.status === 204) {
+                                            showAlert('nothingSelectedAlert', '@T("Admin.Common.Alert.NothingSelected")');
+                                            return;
+                                        }
+                                        updateTable('#banner-grid');
+                                    }
+                                });
+                                $('#delete-selected-action-confirmation').modal('toggle');
+                                return false;
+                            });
+                        });
+                    </script>
+                    <nop-alert asp-alert-id="deleteSelectedFailed" />
+                    <nop-alert asp-alert-id="nothingSelectedAlert" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

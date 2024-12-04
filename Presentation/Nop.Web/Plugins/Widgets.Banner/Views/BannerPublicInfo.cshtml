@@ -1,0 +1,35 @@
+﻿@model List<BSSNop.PlugIn.Widgets.Banner.Models.BannerPublicModel>
+@{
+    Layout = "";
+}
+
+@* @{
+    var cacheImageUrlKey = Model.bannerImageModels.Select(x => x.Id).ToList();
+    var cahceKey = String.Join("_", cacheImageUrlKey);
+}
+
+<cache vary-by="@cahceKey">
+<div class="master-wrapper-content">
+<div class="homepageBanner-wrapper" style="display: block;">
+    <div id="banner" class="homepageBanner">
+                <div id="banner" class="homepageBanner">
+                    <img style="width: 100%" src="@Model.PictureUrl" />
+                </div>
+    </div>
+</div>
+</div>
+</cache> *@
+
+<div class="master-wrapper-content">
+    <div class="homepageBanner-wrapper" style="display: block;">
+        <div class="homepageBanner">
+            @foreach (var banner in Model)
+            {
+                <div class="banner">
+                    <img style="width: 100%" src="@banner.PictureUrl" alt="Banner Image" />
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

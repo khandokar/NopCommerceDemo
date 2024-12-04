@@ -1,0 +1,11 @@
+{
+  "Group": "Widgets",
+  "FriendlyName": "Banner",
+  "SystemName": "Widgets.Banner",
+  "Version": "4.70.2",
+  "SupportedVersions": [ "4.70" ],
+  "Author": "Saffat",
+  "DisplayOrder": 7,
+  "FileName": "BSSNop.PlugIn.Widgets.Banner.dll",
+  "Description": "This plugin enables Banner on Homepage"
+}

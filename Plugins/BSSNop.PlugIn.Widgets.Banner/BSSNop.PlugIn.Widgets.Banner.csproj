@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Copyright>BSS</Copyright>
+	  <Company>BSS</Company>
+	  <Authors>Saffat</Authors>
+	  <PackageLicenseUrl></PackageLicenseUrl>
+	  <PackageProjectUrl>https://www.nopcommerce.com/</PackageProjectUrl>
+	  <RepositoryUrl>https://github.com/bssprojects/bss_nop_web</RepositoryUrl>
+	  <RepositoryType>Git</RepositoryType>
+	  <OutputPath>..\..\Presentation\Nop.Web\Plugins\Widgets.Banner</OutputPath>
+	  <OutDir>$(OutputPath)</OutDir>
+    <!--Set this parameter to true to get the dlls copied from the NuGet cache to the output of your project.
+    You need to set this parameter to true if your plugin has a nuget package 
+    to ensure that the dlls copied from the NuGet cache to the output of your project-->
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+<ItemGroup>
+	<None Remove="plugin.json" />
+	<None Remove="Views\BannerCreate.cshtml" />
+	<None Remove="Views\BannerEdit.cshtml" />
+	<None Remove="Views\BannerList.cshtml" />
+	<None Remove="Views\BannerPublicInfo.cshtml" />
+  <None Remove="Views\_BannerCreateOrUpdate.cshtml" />
+  <None Remove="Views\_ViewImports.cshtml" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+     <ProjectReference Include="..\..\Presentation\Nop.Web.Framework\Nop.Web.Framework.csproj" />
+		<ProjectReference Include="..\..\Presentation\Nop.Web\Nop.Web.csproj" />
+		<ClearPluginAssemblies Include="$(MSBuildProjectDirectory)\..\..\Build\ClearPluginAssemblies.proj" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <Content Include="plugin.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\BannerCreate.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\_BannerCreateOrUpdate.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\BannerEdit.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\BannerList.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\_ViewImports.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\BannerPublicInfo.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+
+	<!-- This target execute after "Build" target -->
+	<Target Name="NopTarget" AfterTargets="Build">
+		<!-- Delete unnecessary libraries from plugins path -->
+		<MSBuild Projects="@(ClearPluginAssemblies)" Properties="PluginPath=$(MSBuildProjectDirectory)\$(OutDir)" Targets="NopClear" />
+	</Target>
+</Project>

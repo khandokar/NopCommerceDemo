@@ -1,0 +1,40 @@
+﻿@using BSSNop.PlugIn.Widgets.Banner.Models;
+@model BannerModel
+@{
+    //page title
+    ViewBag.PageTitle = T("Admin.Banner.AddNew").Text;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<form asp-controller="WidgetBanner" asp-action="Create" method="post">
+    <div class="content-header clearfix">
+        <h1 class="float-left">
+            Add New
+            <small>
+                <i class="fas fa-arrow-circle-left"></i>
+                <a asp-action="List">Back To List</a>
+            </small>
+        </h1>
+        <div class="float-right">
+            <button type="submit" name="save" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn btn-primary">
+                <i class="far fa-save"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+        </div>
+    </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="form-horizontal">
+                <nop-cards id="aboutus-cards">
+                    <nop-card asp-name="jewelleryservicefaq-info" asp-icon="fas fa-info" asp-title="@T("Admin.Banner")" asp-hide-block-attribute-name="false" asp-hide="false"
+                              asp-advanced="false">
+                        @await Html.PartialAsync("_BannerCreateOrUpdate", Model)
+                    </nop-card>
+                </nop-cards>
+            </div>
+        </div>
+    </section>
+</form>
